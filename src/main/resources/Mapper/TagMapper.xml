@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.Dao.TagDao">
+
+    <insert id="addTag">
+        INSERT INTO tag (tagName, type) VALUES (#{tagName}, #{type});
+    </insert>
+
+    <insert id="saveArticleInfo" parameterType="string">
+        INSERT INTO tag_article VALUES ((SELECT id FROM tag WHERE tagName=#{0}), #{1});
+    </insert>
+
+    <update id="updateTag">
+        UPDATE tag SET tagName = #{tagName}
+        <if test="type !=null and type !=''">
+            AND type = #{type}
+        </if>
+    </update>
+
+    <delete id="deleteTag">
+        DELETE FROM tag_article WHERE tagId = (SELECT id FROM tag WHERE tagName=#{0});
+        DELETE FROM tag WHERE tagName=#{0};
+    </delete>
+
+    <select id="getTheListById" resultType="com.spring.Entity.TagEntity">
+        SELECT t.tagName, t.type FROM tag_article ta LEFT JOIN tag t ON ta.tagId=t.id WHERE ta.articleId=#{articleId}
+    </select>
+
+    <update id="updateTheTag" parameterType="ArticleEntity">
+        DELETE FROM tag_article WHERE articleId=#{Id};
+        <foreach collection="tags" item="tagEntity" index="index">
+            INSERT INTO tag_article VALUES ( (SELECT id FROM tag WHERE tagName=#{tagEntity.tagName}), #{Id});
+        </foreach>
+    </update>
+</mapper>

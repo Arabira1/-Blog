@@ -1,0 +1,8 @@
+.error {
+    font-family: "叶根友古刻体1.2", "Adobe Gothic Std B", "Adobe Arabic";
+    font-weight: bold;
+    text-align: center;
+    font-size: 100px;
+    text-shadow:4px 4px rgba(159, 120, 130, .8);
+    color: firebrick;
+}

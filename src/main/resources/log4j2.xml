@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] level:%-5level class:%logger{36} - message:%msg%n"/>
+        </Console>
+        <File name="File" fileName="allLog.log" buffereadIO="true" immediateFlush="true">
+            <PatternLayout>
+                <pattern>
+                    %d{yyyy-mm-dd HH:mm:ss.SSS} function:[%t] level:%-5level class:%logger{36} - message:%msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <logger name="com.spring.Dao.*" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef re="File"/>
+        </Root>
+    </Loggers>
+</Configuration>

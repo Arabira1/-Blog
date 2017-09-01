@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.Dao.KeyDao">
+    <resultMap id="keyEntityMap" type="com.spring.Entity.KeyEntity">
+        <result property="id" column="id"/>
+        <result property="key" column="keyVal" />
+        <result property="type" column="typeVal" />
+        <result property="time" column="startTime"/>
+    </resultMap>
+
+    <insert id="saveTheKey" useGeneratedKeys="true" keyProperty="id" >
+      INSERT INTO encodingKey (keyVal, typeVal, startTime) VALUES (#{key},#{type},#{time});
+    </insert>
+
+    <select id="findKey" parameterType="int" resultMap="keyEntityMap">
+        SELECT * FROM encodingKey WHERE id=#{Id}
+    </select>
+
+    <delete id="delTheKey">
+        DELETE FROM encodingKey WHERE keyVal = #{key}
+    </delete>
+
+
+</mapper>

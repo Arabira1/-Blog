@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.Dao.UserDao">
+    <resultMap id="userList" type="UserEntity">
+        <id column="userId" property="userId"/>
+        <result column="userName" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="priSalt" property="priSalt"/>
+        <result column="mail" property="mail"/>
+        <result column="phone" property="phone"/>
+        <result column="photo" property="photo"/>
+        <result column="loginName" property="loginName"/>
+    </resultMap>
+
+    <insert id="addUser" parameterType="UserEntity">
+        <selectKey keyProperty="userId" resultType="string" order="BEFORE">
+            SELECT count(1) FROM user;
+        </selectKey>
+        insert into user(userName, password, priSalt, mail, phone, photo, loginName, userId) values (
+        <choose>
+            <when test="userName == null || userName == ''">
+                'user'
+            </when>
+            <otherwise>
+                #{userName}
+            </otherwise>
+        </choose>
+        , #{password}, #{priSalt}, #{mail}, #{phone}, #{photo}, #{loginName}, Concat('user', #{userId}) );
+    </insert>
+
+    <update id="updateUserInfo" parameterType="UserEntity">
+        update user set userName = #{userName}, mail = #{mail}, phone = #{phone}, photo = #{photo}, loginName = #{loginName}
+        where userId = #{userId};
+    </update>
+
+    <update id="updatePassword">
+        update user set password = #{password} where userId = #{userId};
+    </update>
+
+    <select id="findById" parameterType="String" resultType="UserEntity">
+        select * from user where userId = #{userId};
+    </select>
+
+    <select id="findByLoginName" parameterType="String" resultType="UserEntity">
+        select * from user where loginName = #{loginName};
+    </select>
+
+    <select id="findIdByUserName" parameterType="String" resultMap="userList">
+        select userId from user where userName=#{userName};
+    </select>
+
+
+</mapper>

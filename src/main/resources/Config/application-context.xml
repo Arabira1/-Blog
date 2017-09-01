@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="com.spring"/>
+
+    <context:annotation-config/>
+
+    <!--数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <!--多语句执行过滤器，必须放开头-->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter"/>
+                <ref bean="wall-filter"/>
+            </list>
+        </property>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <!--执行多语句必须打开多语句执行选项-->
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/blog?allowMultiQueries=true&amp;useUnicode=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="03017"/>
+        <property name="filters" value="wall"/>
+        <property name="maxActive" value="40"/>
+        <property name="minIdle" value="1"/>
+        <property name="initialSize" value="1"/>
+        <property name="maxWait" value="20"/>
+    </bean>
+
+    <!--相同语句合并-->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="mergeSql" value="true"/>
+    </bean>
+    <!--防止sql植入-->
+    <bean name="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="config" ref="wall-config"/>
+    </bean>
+    <!--允许多语句执行-->
+    <bean name="wall-config" class="com.alibaba.druid.wall.WallConfig">
+        <property name="multiStatementAllow" value="true"/>
+    </bean>
+    <!--transactionManager-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!--mybatis配置部分-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--Mybatis更多配置的配置文件的位置-->
+        <property name="configLocation" value="classpath:Config/Mybatis-conf.xml"/>
+    </bean>
+
+    <!--因使用了更容易修改的Mapper方式进行数据访问，sqlSessionTemplate就不用使用了-->
+    <!--<bean id="sqlSessoinTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>-->
+
+    <bean id="mapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--使用包扫描的方式扫描Mapper接口-->
+        <property name="basePackage" value="com.spring.Dao"/>
+        <!--<property name="sqlSessionTemplateBeanName"  value="sqlSessoinTemplate"/>-->
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+    </bean>
+</beans>

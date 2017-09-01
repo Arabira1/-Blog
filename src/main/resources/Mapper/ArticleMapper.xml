@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.Dao.ArticleDao">
+    <resultMap id="articleList" type="ArticleEntity">
+        <id property="Id" column="Id"/>
+        <result property="title" column="title"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result property="content" column="content"/>
+        <collection property="tags" column="Id" fetchType="eager" select="com.spring.Dao.TagDao.getTheListById"/>
+    </resultMap>
+
+    <delete id="deleteArticleById" parameterType="String">
+        delete from the_article where Id = #{Id};
+        DELETE FROM tag_article WHERE articleId=#{Id};
+    </delete>
+
+    <update id="updateArticle" parameterType="ArticleEntity">
+        update the_article set title=#{title}, update_time=#{update_time}, content=#{content};
+    </update>
+
+    <select id="findById" parameterType="String" resultMap="articleList">
+        select * from the_article where Id=#{Id};
+    </select>
+
+    <select id="findByTitle" parameterType="String" resultMap="articleList">
+        select * from the_article where title=#{title};
+    </select>
+
+    <select id="findByUserName" parameterType="String" resultMap="articleList">
+        select art.title, art.create_time, art.update_time from the_article art LEFT JOIN user u where u.userId = art.userId AND u.userName=#{userName};
+    </select>
+
+    <select id="findByUserId" parameterType="String" resultMap="articleList">
+        select art.title, art.create_time, art.update_time from the_article art WHERE art.userId=#{0};
+    </select>
+
+    <select id="findByTitle" parameterType="String" resultMap="articleList">
+        select art.title, art.create_time, art.update_time from the_article art WHERE art.title LIKE CONCAT('%',#{0},'%');
+    </select>
+
+    <insert id="saveTheArticle" useGeneratedKeys="true" keyProperty="Id">
+        insert into the_article(title, userId,create_time,update_time, content) values(#{title}, #{author}, #{createTime}, #{createTime}, #{content});
+    </insert>
+</mapper>

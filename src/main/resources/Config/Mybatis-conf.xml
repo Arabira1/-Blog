@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <setting name="logPrefix" value="Mybatis:"/>
+        <!--打印sql日志-->
+        <setting name="logImpl" value="LOG4J2"/>
+    </settings>
+    <!--使用对包扫描的方式取代<typeAlias>标签的配置-->
+    <typeAliases>
+        <package name="com.spring.Entity"/>
+    </typeAliases>
+    <plugins>
+        <!--pageHelper插件-->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--指定数据源类型-->
+            <property name="helperDialect" value="mariadb"/>
+            <!--使用RowBounds设置的offset设置为pageNumber;limit设置为pageSize-->
+            <property name="offsetAsPageNum" value="true"/>
+            <!--自动计算总数-->
+            <property name="rowBoundsWithCount" value="true"/>
+            <!--分页合理化，pageNumber<=0时查询第一页-->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+    <!--扫描Mapper配置文件-->
+    <mappers>
+        <mapper resource="Mapper/UserMapper.xml"/>
+        <mapper resource="Mapper/ArticleMapper.xml"/>
+        <mapper resource="Mapper/KeyMapper.xml"/>
+        <mapper resource="Mapper/TagMapper.xml"/>
+    </mappers>
+</configuration>
