@@ -6,6 +6,7 @@ import com.spring.Entity.UserEntity;
 import com.spring.Server.UserService;
 import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class UserController {
 
     @RequestMapping(value = "/key", method = RequestMethod.GET)
     public Map<String, Object> prelogin() throws Exception {
+        resultMap = new HashMap<>();
         KeyEntity key = userService.getNewKey();
         resultMap.put("status", "OK");
         resultMap.put("keyType", key.getKey());
@@ -48,13 +50,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public Map<String, Object> signIn(@NotNull RequestEntity requestEntity, HttpServletRequest httpServletRequest) {
+    public Map<String, Object> signIn(@NotNull RequestEntity requestEntity) {
         resultMap = new HashMap<String, Object>();
         UserEntity userEntity = requestEntity.getUserInfo();
         Integer id = requestEntity.getId();
         if (userService.checkLoginName(userEntity.getLoginName())) {
             try {
-                if (userService.signIn(userEntity, id, httpServletRequest)) {
+                if (userService.signIn(userEntity, id)) {
                     resultMap.put("status", "OK");
                 }
                 else {
@@ -74,16 +76,24 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Map<String, Object> login(@NotNull RequestEntity requestEntity, HttpServletRequest httpServletRequest) {
+    public Map<String, Object> login(@RequestBody @NotNull RequestEntity requestEntity, HttpServletRequest httpServletRequest) {
         resultMap = new HashMap<String, Object>();
         UserEntity userEntity = requestEntity.getUserInfo();
         Integer id = requestEntity.getId();
         try {
-            String userId = userService.login(userEntity.getLoginName(), userEntity.getPassword(), id);
-            resultMap.put("status", "OK");
-            resultMap.put("description", "登录成功");
-            resultMap.put("nextUrl", "");
-            httpServletRequest.setAttribute("user", userId);
+            String message = userService.login(userEntity.getLoginName(), userEntity.getPassword(), id);
+            if (null == message) {
+                UserEntity user = userService.findById(userEntity.getUserId());
+                resultMap.put("status", "OK");
+                resultMap.put("description", "登录成功");
+                resultMap.put("nextUrl", "");
+                resultMap.put("userInfo", user);
+                httpServletRequest.setAttribute("user", userEntity.getUserId());
+            }
+            else {
+                resultMap.put("status", "error");
+                resultMap.put("message", message);
+            }
         } catch (Exception e) {
             resultMap.put("status", "error");
             resultMap.put("description", e.getMessage());

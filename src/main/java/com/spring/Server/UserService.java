@@ -55,12 +55,20 @@ public class UserService {
         return key;
     }
 
+    public UserEntity findById(String userId) {
+        UserEntity userEntity = userDao.findById(userId);
+        userEntity.setPassword("");
+        userEntity.setPriSalt("");
+        return userEntity;
+    }
+
     public KeyEntity getNewKey() throws Exception {
         KeyEntity keyVal = RSA.getNewKey();
         keyVal.setTime(Timestamp.valueOf(LocalDateTime.now()));
         keyDao.saveTheKey(keyVal);
         return keyVal;
     }
+
     public String login(@NotNull String loginName, @NotNull String password, Integer Id) throws Exception {
         KeyEntity key = isAlive(Id);
         if (null == key) {
@@ -92,7 +100,7 @@ public class UserService {
         }
     }
 
-    public boolean signIn(@NotNull UserEntity userEntity, Integer id, HttpServletRequest request) throws Exception {
+    public boolean signIn(@NotNull UserEntity userEntity, Integer id) throws Exception {
         KeyEntity keyEntity = keyDao.findKey(id);
         if (!checkLoginName(userEntity.getLoginName()) ||
             !mailMatch(userEntity.getMail()) ||

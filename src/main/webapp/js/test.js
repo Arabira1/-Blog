@@ -72,7 +72,7 @@ function decoding(src, key) {
     return bytes.toString(CryptoJS.enc.Utf8);
 }*/
 $(function () {
-    publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCMlyuBvDx7Xp/gynVXG8R5Ee9pD34sv0bY1Q17QdXNmp2nLthep/6G1yo7t346BZzXxM2kYN8Rf2zzumal0dTdqwqdJzOHBQdVBN0Jm7awOWLT+0SH2d6fpT5H+aYqkn3Y4EfvJ5ahEwJJKqDZDTdmwVxvYK+Q+Gsk8CgrdrNKbQIDAQAB';
+    publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4ZsH37rvVP4yXN7p7lF5A9ETQ4iToUTImwc4qRrPKdsZvUsQLTTgjsMFb/TxFGxDUs8K0qyEuSvp9dNd51O55Zy9UvEASd29r9HNLSkWop7+O74jmiIMM4d23h9s9JhmCPhqFUYwJlBmRHbtDSOhrRQkapHBW9ut+Trd5NTkfAwIDAQAB';
     encoding = encrypt("aaaaaaaaaaaaaaaaaaa", publicKey);
     console.log(encoding);
 });

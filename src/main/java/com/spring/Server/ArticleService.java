@@ -80,15 +80,16 @@ public class ArticleService {
     }
 
     public void updateTheArticle(ArticleEntity articleEntity) {
-        ArticleEntity check = articleDao.findById(articleEntity.getId());
         articleDao.updateArticle(articleEntity);
         tagDao.updateTheTag(articleEntity);
     }
 
     public void deleteTheArticle(String id, String userId) {
         ArticleEntity check = articleDao.findById(id);
-        if (null != check || check.getAuthor().equals(userId)) {
-            articleDao.deleteArticleById(id);
+        if (null != check ) {
+            if (null != check.getAuthor() || check.getAuthor().equals(userId)) {
+                articleDao.deleteArticleById(id);
+            }
         }
     }
 

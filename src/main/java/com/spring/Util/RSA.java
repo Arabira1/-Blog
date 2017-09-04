@@ -18,7 +18,7 @@ public class RSA {
 
     //将string类型的私钥转换为私钥类
     private static PrivateKey getPrivateKey(String keyVal) throws Exception {
-        byte[] keyBytes = Base64.decodeBase64(keyVal.getBytes());
+        byte[] keyBytes = Base64.decodeBase64(keyVal.getBytes("UTF-8"));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA", "BC");
         //使用抽象语法标记编码私钥字符串
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
@@ -34,7 +34,7 @@ public class RSA {
         Cipher cipher = Cipher.getInstance("RSA/None/PKCS1Padding", "BC");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] bytes1 = cipher.doFinal(bytes);
-        return new String(bytes1);
+        return new String(bytes1, "UTF-8");
     }
 
     public static KeyEntity getNewKey() throws Exception {
@@ -49,9 +49,9 @@ public class RSA {
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         //提取公钥,进行base64处理
-        keyEntity.setKey(new String(Base64.encodeBase64(publicKey.getEncoded())));
+        keyEntity.setKey(new String(Base64.encodeBase64(publicKey.getEncoded()), "UTF-8"));
         //提取私钥，进行base64处理
-        keyEntity.setType(new String(Base64.encodeBase64(privateKey.getEncoded())));
+        keyEntity.setType(new String(Base64.encodeBase64(privateKey.getEncoded()), "UTF-8"));
         keyEntity.setTime(Timestamp.valueOf(LocalDateTime.now()));
         return keyEntity;
     }

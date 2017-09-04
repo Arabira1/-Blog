@@ -86,6 +86,6 @@ public class ArticleServiceTest {
 
     @Test
     public void delArticle() {
-        articleService.deleteTheArticle(id, "4");
+        articleService.deleteTheArticle( "4","user0");
     }
 }

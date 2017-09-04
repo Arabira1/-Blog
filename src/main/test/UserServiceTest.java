@@ -29,8 +29,6 @@ public class UserServiceTest {
     public void findKey() throws Exception {
 
         KeyEntity keyEntity = null/*userService.getNewKey()*/;
-        keyEntity = userService.isAlive(keyEntity.getId());
-        System.out.println(keyEntity.getType());
     }
 
     @Test
@@ -46,7 +44,6 @@ public class UserServiceTest {
         userEntity.setPassword("123456789");
         userEntity.setPhone("12365254785");
         userEntity.setUserName("user");
-        userService.signIn(userEntity,request);
     }
 
     @Test

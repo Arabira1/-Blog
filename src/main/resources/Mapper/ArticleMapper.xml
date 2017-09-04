@@ -23,10 +23,6 @@
         select * from the_article where Id=#{Id};
     </select>
 
-    <select id="findByTitle" parameterType="String" resultMap="articleList">
-        select * from the_article where title=#{title};
-    </select>
-
     <select id="findByUserName" parameterType="String" resultMap="articleList">
         select art.title, art.create_time, art.update_time from the_article art LEFT JOIN user u where u.userId = art.userId AND u.userName=#{userName};
     </select>
