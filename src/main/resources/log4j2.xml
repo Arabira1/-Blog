@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
+        <!--输出日志到控制台-->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] level:%-5level class:%logger{36} - message:%msg%n"/>
         </Console>
-        <File name="File" fileName="allLog.log" buffereadIO="true" immediateFlush="true">
+        <!--输出日志到文件-->
+        <RollingFile name="File" fileName="logs/allLog.log" buffereadIO="true"
+                     immediateFlush="true" filePattern="logs/allLog-%d{yyyy-MM-dd}.gz" ignoreExceptions="false">
             <PatternLayout>
                 <pattern>
                     %d{yyyy-mm-dd HH:mm:ss.SSS} function:[%t] level:%-5level class:%logger{36} - message:%msg%n
                 </pattern>
             </PatternLayout>
-        </File>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <logger name="com.spring.Dao.*" level="debug" additivity="false">
