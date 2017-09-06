@@ -12,6 +12,7 @@ public class ArticleEntity {
     private Timestamp createTime;
     private Timestamp updateTime;
     private String content;
+    private String imgPath;
     private List<TagEntity> tags;
     private String author;
 
@@ -37,6 +38,14 @@ public class ArticleEntity {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
     public Timestamp getUpdateTime() {

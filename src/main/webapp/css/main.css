@@ -3,6 +3,9 @@ body {
     height:100%;
 
 }
+.line {
+    border:2px #000000 dashed;
+}
 .headder {
     background-image: url("../img/map.jpg");
     background-attachment: fixed;
@@ -26,7 +29,11 @@ body {
     font-size: 45px;
 }
 .tag {
+    margin-left: 3px;
     font-family: "Ubuntu Light", "Adobe Gothic Std B", "Adobe Arabic";
+}
+.blog-main {
+    margin-top: 90px;
 }
 .blog-content {
     font-size:20px;
@@ -38,4 +45,21 @@ body {
 }
 .blog-footer {
     height:20px;
+}
+.blog-sidebar {
+    margin-top:90px;
+}
+.sidebar {
+    margin-bottom: 20px;
+}
+.sidebar-title {
+    font-family: "Ubuntu Light", "Adobe Gothic Std B", "Adobe Arabic";
+    font-size: 50px;
+}
+.sidebar-content {
+    font-family: "Ubuntu Light", "Adobe Gothic Std B", "Adobe Arabic";
+    font-size: 18px;
+    white-space:nowrap; /* 禁止自动换行 */
+    overflow:hidden; /* 隐藏溢出的内容 */
+    text-overflow:ellipsis; /* 溢出文本使用...代替 */
 }

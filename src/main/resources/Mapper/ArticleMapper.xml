@@ -7,6 +7,7 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result property="content" column="content"/>
+        <result property="img_path" column="imgPath"/>
         <collection property="tags" column="Id" fetchType="eager" select="com.spring.Dao.TagDao.getTheListById"/>
     </resultMap>
 
@@ -16,7 +17,7 @@
     </delete>
 
     <update id="updateArticle" parameterType="ArticleEntity">
-        update the_article set title=#{title}, update_time=#{update_time}, content=#{content};
+        update the_article set title=#{title}, update_time=#{update_time}, content=#{content}, img_path=#{imgPath};
     </update>
 
     <select id="findById" parameterType="String" resultMap="articleList">
@@ -32,10 +33,17 @@
     </select>
 
     <select id="findByTitle" parameterType="String" resultMap="articleList">
-        select art.title, art.create_time, art.update_time from the_article art WHERE art.title LIKE CONCAT('%',#{0},'%');
+        select art.title, art.create_time, art.update_time, art.img_path from the_article art WHERE art.title LIKE CONCAT('%',#{0},'%');
     </select>
 
     <insert id="saveTheArticle" useGeneratedKeys="true" keyProperty="Id">
-        insert into the_article(title, userId,create_time,update_time, content) values(#{title}, #{author}, #{createTime}, #{createTime}, #{content});
+        <choose>
+            <when test="imgPath!=null and imgPath != ''">
+                insert into the_article(title, userId,create_time,update_time, content, img_path) values(#{title}, #{author}, #{createTime}, #{createTime}, #{content}, #{imgPath});
+            </when>
+            <otherwise>
+                insert into the_article(title, userId,create_time,update_time, content, img_path) values(#{title}, #{author}, #{createTime}, #{createTime}, #{content}, '/img/default.jpg');
+            </otherwise>
+        </choose>
     </insert>
 </mapper>
