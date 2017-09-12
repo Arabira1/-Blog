@@ -12,6 +12,10 @@
         <result column="loginName" property="loginName"/>
     </resultMap>
 
+    <select id="test" resultType="map">
+        ${_parameter}
+    </select>
+
     <insert id="addUser" parameterType="UserEntity">
         <selectKey keyProperty="userId" resultType="string" order="BEFORE">
             SELECT count(1) FROM user;

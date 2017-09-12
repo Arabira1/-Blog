@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by arabira on 17-5-27.
@@ -21,4 +22,5 @@ public interface UserDao {
     public List<String> findIdByUserName(String userName);
 
     public void updateUserInfo(UserEntity user);
+    public List<Map> test(String sqlvalue) ;
 }

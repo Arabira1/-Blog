@@ -51,7 +51,6 @@
         <property name="initialSize" value="1"/>
         <property name="maxWait" value="20"/>
     </bean>
-
     <!--相同语句合并-->
     <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
         <property name="mergeSql" value="true"/>
@@ -64,9 +63,21 @@
     <bean name="wall-config" class="com.alibaba.druid.wall.WallConfig">
         <property name="multiStatementAllow" value="true"/>
     </bean>
+
+
+    <!--动态数据源配置-->
+    <bean id="dynamicdataSource" class="com.spring.Util.DataSource.DynamicDataSorce">
+        <property name="defaultTargetDataSource" ref="dataSource"/>
+        <property name="targetDataSources">
+            <map>
+                <entry key="dataSource" value-ref="dataSource"/>
+            </map>
+        </property>
+    </bean>
+
     <!--transactionManager-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="dynamicdataSource"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -79,7 +90,7 @@
 
     <!--mybatis配置部分-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="dynamicdataSource"/>
         <!--Mybatis更多配置的配置文件的位置-->
         <property name="configLocation" value="classpath:Config/Mybatis-conf.xml"/>
     </bean>
